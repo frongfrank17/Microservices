@@ -1,2 +1,2 @@
 # Microservices
-# Oauth
+Oauth , permission  , user , thing , role
