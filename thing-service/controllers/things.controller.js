@@ -1,6 +1,6 @@
 const Thing = require('../models/thing.model')
 const PermissionService = require('../services/permission.service')
-const PackageService = require('../services/permission.service')
+const PackageService = require('../services/package.service')
 
 module.exports = {
     //GET /report/student
@@ -14,7 +14,7 @@ module.exports = {
                 res.status(401).send([])
             } 
     
-            const packagePermission = await PackageService.getPermissionOnPackage()
+            const packagePermission = await PackageService.getPackage()
             let things = await Thing.find()
             things.filter(packagePermission)
             things.filter(rolePermission)
