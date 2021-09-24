@@ -1,4 +1,4 @@
-const userService = require('./user.service')
-const containerService = require('./container.service')
+const packageService = require('./package.service')
+const permissionService = require('./permission.service')
 
-module.exports = Object.assign({}, { userService, containerService })
+module.exports = Object.assign({}, { packageService, permissionService })
