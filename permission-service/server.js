@@ -60,7 +60,6 @@ server.listen(config.serverSettings.port, () => {
                     res.json({ headers : headers , cookies : req.cookies  })
         }  )
         app.use('/api' ,   RateLimitMid ,  require('./routes'))
-        app.use('/api/v2' , RateLimitMid , require('./routes/v2'))
      
         console.log(`Server started succesfully, running on port: ${config.serverSettings.port}.`)
     })

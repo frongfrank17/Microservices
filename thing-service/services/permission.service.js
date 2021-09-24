@@ -6,7 +6,7 @@ const serviceUrl = (process.env.SERVICE_PERMISSION || 'http://10.224.187.41:3004
 module.exports.getPermissionByRole = (payload) => {
     return new Promise((resolve, reject) => {
 
-        let apiUrl = new URL((serviceUrl) + '/permission/' + payload.owner + '/' + payload.container)
+        let apiUrl = new URL((serviceUrl) + '/permission/role/' + payload.role)
 
         const opts = {
             gzip: true,
