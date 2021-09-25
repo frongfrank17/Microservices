@@ -22,7 +22,7 @@ module.exports = {
             res.status(200).send(things)
         } catch (error) {
             console.log(error);
-            res.status(400).send([])
+            res.status(400).send(error)
         }
     }
 }

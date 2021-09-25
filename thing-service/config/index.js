@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'Auth',
+    name: 'Things-Service',
     version: '1.0.0',
     env: process.env.NODE_ENV || 'development',
     serverSettings: {

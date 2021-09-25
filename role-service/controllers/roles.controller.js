@@ -5,14 +5,17 @@ module.exports = {
     getRoleByUsername: async (req, res) => {
 
         try {
-            const username = req.param.username
-            const role = await Role.find({username: username})
+            
+            const role = await Role.find({member :  { $eq : req.params.username } })
+            if(!role) {
+             return   res.status(400).json({ message : "Not Data" ,  data : [] } )
+            }  
+            res.status(200).json({  data : role} )
 
-            res.status(200).send(role)
         } catch (err) {
             console.log(err.message)
             console.log(err.stack)
-            res.status(500).send(err.message)
+            res.status(500).json({ message : err.message , data : [] } )
         }
     }
 }

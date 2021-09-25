@@ -1,13 +1,13 @@
 module.exports = {
-    name: 'Auth',
+    name: 'Role-Service',
     version: '1.0.0',
     env: process.env.NODE_ENV || 'development',
     serverSettings: {
-        port: process.env.PORT || 3200
+        port: process.env.PORT || 3202
     },
     dbSettings: {
         db:  'AccessManagement' ,
-        server: process.env.DB_SERVER || '10.224.188.14:27017',
+        server: process.env.DB_SERVER || 'localhost:27017',
         get url (){
             return `mongodb://${this.server}/${this.db}`
         }

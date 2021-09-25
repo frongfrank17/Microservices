@@ -1,4 +1,4 @@
 const userService = require('./user.service')
-const containerService = require('./container.service')
+const roleService = require('./roles.service')
 
-module.exports = Object.assign({}, { userService, containerService })
+module.exports = Object.assign({}, { userService , roleService})

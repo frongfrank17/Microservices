@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config')
-
+const genkey =require('../controllers/genkey')
 module.exports.isAuthen = (req, res, next) => { 
 
     const authorization = req.headers.authorization
@@ -14,8 +14,10 @@ module.exports.isAuthen = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token ,config.tokenSettings.privateKey)
-        req.jwtDecode = decoded
+        const key = genkey()
+   
+        const decoded = jwt.verify(token ,key)
+        res.status(200).json(decoded)
 
     } catch(err) {
         
