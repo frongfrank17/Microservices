@@ -51,15 +51,8 @@ server.listen(config.serverSettings.port, () => {
 
     db.once('open',() => {
         console.log('Connected. Starting Server')
-        app.get('/api/test' , csrf({cookie : true}) , ( req, res ,next) => {
 
-                    const objectjson = req
-                    let headers =  objectjson['headers']
-                    console.log('Cookies: ', req.cookies)
-
-                    res.json({ headers : headers , cookies : req.cookies  })
-        }  )
-        app.use('/api' ,   RateLimitMid ,  require('./routes'))
+        app.use(   require('./routes'))
      
         console.log(`Server started succesfully, running on port: ${config.serverSettings.port}.`)
     })

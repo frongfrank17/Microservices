@@ -1,16 +1,21 @@
 const request = require('request');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 process.env.NODE_TLS_ACCEPT_UNTRUSTED_CERTIFICATES_THIS_IS_INSECURE = '1'
-const serviceUrl = (process.env.SERVICE_PERMISSION || 'http://10.224.187.41:3004');
+const serviceUrl = ( 
+   // 'http://10.224.188.14' || 
+    process.env.SERVICE_PERMISSION || //'http://localhost:3203' || 
+    'http://10.224.187.41:3004');
 
 module.exports.getPermissionByRole = (payload) => {
     return new Promise((resolve, reject) => {
 
-        let apiUrl = new URL((serviceUrl) + '/permission/role/' + payload.role)
+        let apiUrl = new URL((serviceUrl) + '/permission/get')
 
         const opts = {
             gzip: true,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' ,
+            'authorization' : payload.token
+        },
             url: apiUrl,
             method: 'GET',
             json: true

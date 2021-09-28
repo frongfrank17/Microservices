@@ -14,7 +14,7 @@ module.exports.isAuthen = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token ,config.tokenSettings.privateKey)
+        const decoded = jwt.verify(token ,config.tokenSettings.publicKey)
         req.jwtDecode = decoded
 
     } catch(err) {

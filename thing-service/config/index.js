@@ -1,23 +1,21 @@
 module.exports = {
-    name: 'Things-Service',
+    name: 'Auth',
     version: '1.0.0',
     env: process.env.NODE_ENV || 'development',
     serverSettings: {
-        port: process.env.PORT || 3200
+        port: process.env.PORT || 3205
     },
     dbSettings: {
         db:  'AccessManagement' ,
-        server: process.env.DB_SERVER || '10.224.188.14:27017',
+        server: process.env.DB_SERVER || // 'localhost:27017' ,
+         '10.224.188.14:27017',
         get url (){
             return `mongodb://${this.server}/${this.db}`
         }
     },
     tokenSettings: {
-        publicKey: process.env.PUBLIC_KEY_ACCESS || 'Public_keyAccessT',
-        publicKey_refresh: process.env.PUBLIC_KEY_REFRESH || 'Public_keyRefreshT',
-        accessTokenExpiry: 60 * 1* 24,
+        publicKey: process.env.PUBLIC_KEY|| 'Authus',
         privateKey: process.env.PRIVATE_KEY || 'Private_digital',
-        privateKey_refresh :process.env.PRIVATE_KEY_REFRESH || 'Private_digital_refresh', 
-        refreshTokenExpiry: 60 * 2* 24,
+
     }
 }

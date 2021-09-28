@@ -1,5 +1,5 @@
-const configs = require('../config')
 const crypto = require('crypto');
+const configs = require('./index')
 const hashHmacSha256 = string => crypto
   .createHmac('sha256', configs.tokenSettings.publicKey)
   .update(string)

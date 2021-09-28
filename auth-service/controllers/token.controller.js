@@ -8,20 +8,23 @@ module.exports = {
                 return res.status(401)
             }
             let user = await services.userService.Login(req.body)
-            if(!user.data) {
-              return  res.status(400)
+            
+            if(user.status == false) {
+              return  res.status(400).send(user.message)
             } 
             user = user.data 
             let role = await services.roleService.GetRole({
                 username : user.username
             })
+         
             if(!role.data ) {
                 return  res.status(400)
             } 
+    
             let token = await  authentication.AccessToken({
                     email : user.email, 
                     username : user.username , 
-                    name : role.role
+                    role : role.data.role
                 })
 
             //encode

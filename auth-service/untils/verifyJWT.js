@@ -16,7 +16,7 @@ module.exports.isAuthen = (req, res, next) => {
     try {
         const key = genkey()
    
-        const decoded = jwt.verify(token ,key)
+        const decoded = jwt.verify(token ,config.tokenSettings.publicKey)
         res.status(200).json(decoded)
 
     } catch(err) {

@@ -1,35 +1,106 @@
 const Thing = require('../models/thing.model')
-const PermissionService = require('../services/permission.service')
-const PackageService = require('../services/package.service')
+const services = require('../services')
+
 
 module.exports = {
     //GET /report/student
     thingTable: async (req , res) => {
         const { username, role } = req.body
-
+        const authorization = req.headers.authorization
         try {
-            const rolePermission = await PermissionService.getPermissionByRole(role)
-            const haveViewThing = checkAvailability(rolePermission, 'view:thing')
+            // Middleware
+            const rolePermission = await services.permissionService.getPermissionByRole({ token : authorization} )
+            const Package = await services.packageService.getPackage({ token : authorization})
+   
+
+            let permissions = rolePermission.permissions
+            const haveViewThing = permissions.includes('read:thing')
             if (!haveViewThing) {
-                res.status(401).send([])
+                 return   res.status(401).send(  { message :'Missing Bearer Token' })
             } 
-    
-            const packagePermission = await PackageService.getPackage()
-            let things = await Thing.find()
-            things.filter(packagePermission)
-            things.filter(rolePermission)
-            
-            res.status(200).send(things)
+            //----------------
+
+            permissions = permissions.filter( pms => pms != 'read:thing' )
+
+
+            let filter = {
+                _id : 0 , 
+                name : 1 , 
+                package : 1 ,
+
+            } 
+
+            permissions.map( e => {
+                 let spliStr = e.split(":")
+                 switch(spliStr[0]) {
+                     case  "read"  : 
+                        filter[spliStr[1]] = 1
+                     break;
+                 } 
+  
+
+            } )
+           
+            let things = await Thing.find({} , filter).lean().exec()
+     
+              
+            result  =  await Promise.all ( things.map( t => {
+         
+                let len = t.package.length
+                let obj = t
+
+                switch (len)  {
+
+                            case  1 : 
+
+                            let findPackage = Package.find( pk =>  pk.name == "advanced")
+                      
+                                permis = findPackage.permission
+                   
+           
+                                obj['package'] ='basic'
+
+                                permis.map( e => {
+                                
+                                    let spliStr = e.split(":")
+
+                                    if(spliStr[0] == 'read') {
+                                            if(t[spliStr[1]]) { 
+                                                obj[spliStr[1]] = '-'
+                                            }
+                                        } 
+                                
+                                    } )
+                          
+
+                            break ;
+                            case 2 :
+                          
+                        
+                              
+                                obj['package'] = "advanced" 
+                       
+                            break; 
+
+                        } 
+                     
+                      
+                   
+                 
+                      
+                    return   Promise.resolve(obj)
+                    } )
+
+             
+           )
+                    
+            res.status(200).send(result)
+
         } catch (error) {
-            console.log(error);
-            res.status(400).send(error)
+            console.log(error.stack);
+            res.status(500).send(error.message)
         }
     }
 }
 
 //เช็คคำใน Array Return True/False
-function checkAvailability(arr, val) {
-    return arr.some(function (arrVal) {
-        return val === arrVal;
-    });
-}

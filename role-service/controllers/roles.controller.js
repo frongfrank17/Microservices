@@ -6,7 +6,7 @@ module.exports = {
 
         try {
             
-            const role = await Role.find({member :  { $eq : req.params.username } })
+            const role = await Role.findOne({ username : req.params.username })
             if(!role) {
              return   res.status(400).json({ message : "Not Data" ,  data : [] } )
             }  

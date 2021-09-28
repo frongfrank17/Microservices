@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config')
-
+const crypto = require('crypto');
+const hashHmacSha256 = string => crypto
+  .createHmac('sha256', config.tokenSettings.publicKey)
+  .update(string)
+  .digest('hex');
 module.exports.isAuthen = (req, res, next) => { 
 
     const authorization = req.headers.authorization
@@ -9,16 +13,20 @@ module.exports.isAuthen = (req, res, next) => {
     }
 
     const token = authorization.split(' ')[1]
+
     if (!token) {
         return next(new Error('Missing Bearer Token'))
     }
 
     try {
-        const decoded = jwt.verify(token ,config.tokenSettings.privateKey)
+        let key =genKey()
+        console.log(key)
+        const decoded = jwt.verify(token ,config.tokenSettings.publicKey)
+  
         req.jwtDecode = decoded
-
+   
     } catch(err) {
-        
+            console.log(err.stack)
         res.statusCode = 401;
         return res.send({'message': 'Invalid Access Token'});
     }
@@ -26,25 +34,10 @@ module.exports.isAuthen = (req, res, next) => {
     next()
 }
 
-module.exports.isAuthen_ = (req, res, next) => { 
+// Server-Side
+function genKey() {
 
-    const authorization = req.accessToken
-    /*if (!authorization || !(authorization.search('Bearer ') === 0)) {
-        return next(new Error('Missing Authorization Header'))
-    }
-    */
-    const token = authorization.split(' ')[1]
-    if (!token) {
-        return next(new Error('Missing Bearer Token'))
-    }
-
-    try {
-        const decoded = jwt.verify(token ,config.tokenSettings.privateKey)
-        req.jwtDecode = decoded
-    } catch(err) {
-        res.statusCode = 401;
-        return res.send({'message': 'Invalid Access Token'});
-    }
-
-    next()
-}
+    //console.log("rawKEY"+rawKey)
+    const key = hashHmacSha256( config.tokenSettings.publicKey);
+    return key;
+  }
