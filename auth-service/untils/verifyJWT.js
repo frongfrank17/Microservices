@@ -17,8 +17,7 @@ module.exports.isAuthen = (req, res, next) => {
         const key = genkey()
    
         const decoded = jwt.verify(token ,config.tokenSettings.publicKey)
-        res.status(200).json(decoded)
-
+        req.jwtDecode = decoded
     } catch(err) {
         
         res.statusCode = 401;
@@ -41,12 +40,12 @@ module.exports.isAuthen_ = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token ,config.tokenSettings.privateKey)
-        req.jwtDecode = decoded
+        const decoded = jwt.verify(token ,config.tokenSettings.publicKey)
+        res.status(200).json(decoded)
     } catch(err) {
         res.statusCode = 401;
         return res.send({'message': 'Invalid Access Token'});
     }
 
-    next()
+
 }

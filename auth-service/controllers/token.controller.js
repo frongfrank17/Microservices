@@ -35,5 +35,37 @@ module.exports = {
             return res.status(500).send({  message : err.message})
         }
     }   ,
-    
+    Developtoken : async  ( req , res ) => {
+        try {
+          
+            let {username } = req.jwtDecode
+            let  authorization = req.headers.authorization
+            let title = req.query.title
+            let right  =  req.body.right || ['create:data' ]
+            let role = await services.roleService.GetRole({
+                username : username
+            })
+            
+            if(!role.data ) {
+                return  res.status(400)
+            } 
+            let permission = await services.permissionService.GetPermissionByRole({token : authorization } )
+            let permiss = permission.permissions
+            
+            let result = permiss.filter( p => right.includes(p))
+       
+            let token = await  authentication.DevelopToken({
+                    username : username , 
+                    token_name : title , 
+                    permission  : result
+            })
+        
+            res.status(200).json({ "token_type" : "Bearer" , "token" : token  }) 
+           
+        } catch(err) {
+            console.log( "MESSAGE : " , err.message) 
+            console.log( "STACK : " , err.stack)
+            return res.status(500).send({  message : err.message})
+        }
+    }   ,    
 } 
