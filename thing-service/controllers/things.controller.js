@@ -7,17 +7,12 @@ module.exports = {
     thingTable: async (req , res) => {
         const { username, role } = req.body
         const authorization = req.headers.authorization
+        let permissions = req.permissions
         try {
             // Middleware
-            const rolePermission = await services.permissionService.getPermissionByRole({ token : authorization} )
             const Package = await services.packageService.getPackage({ token : authorization})
-   
+            console.log(Package)
 
-            let permissions = rolePermission.permissions
-            const haveViewThing = permissions.includes('read:thing')
-            if (!haveViewThing) {
-                 return   res.status(401).send(  { message :'Missing Bearer Token' })
-            } 
             //----------------
 
             permissions = permissions.filter( pms => pms != 'read:thing' )

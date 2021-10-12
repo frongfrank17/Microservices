@@ -5,6 +5,7 @@ const hashHmacSha256 = string => crypto
   .createHmac('sha256', config.tokenSettings.publicKey)
   .update(string)
   .digest('hex');
+  
 module.exports.isAuthen = (req, res, next) => { 
 
     const authorization = req.headers.authorization
@@ -19,8 +20,7 @@ module.exports.isAuthen = (req, res, next) => {
     }
 
     try {
-        let key =genKey()
-        console.log(key)
+
         const decoded = jwt.verify(token ,config.tokenSettings.publicKey)
   
         req.jwtDecode = decoded
@@ -32,7 +32,7 @@ module.exports.isAuthen = (req, res, next) => {
     }
 
     next()
-}
+} 
 
 // Server-Side
 function genKey() {

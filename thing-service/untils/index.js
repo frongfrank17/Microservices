@@ -1,3 +1,3 @@
 const authorise = require('./verifyJWT')
-
-module.exports = Object.assign({}, { authorise })
+const Middleware = require('./Middleware')
+module.exports = Object.assign({}, { authorise , Middleware })

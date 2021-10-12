@@ -21,5 +21,9 @@ const genKey = require('./genkey')
            
             const DevelopToken = jwt.sign( payload ,  config.tokenSettings.developKey)
             return  DevelopToken
+        } ,
+        serviceToken  : async (payload , signature) => {
+           const ServiceToken = jwt.sign(payload ,signature ) 
+           return ServiceToken
         } 
  }

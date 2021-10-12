@@ -55,6 +55,7 @@ module.exports = {
             let result = permiss.filter( p => right.includes(p))
        
             let token = await  authentication.DevelopToken({
+                    type : "DEVELOP" ,  
                     username : username , 
                     token_name : title , 
                     permission  : result
@@ -67,5 +68,32 @@ module.exports = {
             console.log( "STACK : " , err.stack)
             return res.status(500).send({  message : err.message})
         }
-    }   ,    
+    }   , 
+    Servicetoken : async (req , res ) => {
+        try {
+
+            let signature = req.headers['x-api-key']
+            
+            let username = req.headers.user
+
+            if( username == null || username == undefined || username == '' ) {
+                return res.status(400)
+            }
+            if( signature == null || signature == undefined || signature == '' ) {
+                return res.status(400)
+            }         
+        
+            let token  = await authentication.serviceToken({ username : username  } , signature )
+
+            res.status(200).json( { apiKey : token } )
+
+
+        }catch(err) {
+
+            console.log(' MESSAGE : ' ,err.message)
+            console.log(' STACK : ' ,err.stack)
+
+            res.status(500).send( { status : false , message : err.message } )
+        }
+    }    
 } 
