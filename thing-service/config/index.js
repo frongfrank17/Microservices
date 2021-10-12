@@ -16,7 +16,7 @@ module.exports = {
     tokenSettings: {
         publicKey: process.env.PUBLIC_KEY|| 'Authus',
         privateKey: process.env.PRIVATE_KEY || 'THIVG_14EY',
-
+        serviceKey: process.env.PRIVATE_KEY || 'SERV1CE_',
 
     }
 }
