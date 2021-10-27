@@ -7,7 +7,7 @@ const genKey = require('./genkey')
         AccessToken   : async (payload) => {
             const key = genKey()
         
-            const accessToken = jwt.sign(payload , config.tokenSettings.publicKey , {expiresIn : '1hr'})
+            const accessToken = jwt.sign(payload ,config.tokenSettings.publicKey, {expiresIn : '1hr'})
          
             return  accessToken
         } , 
@@ -23,7 +23,9 @@ const genKey = require('./genkey')
             return  DevelopToken
         } ,
         serviceToken  : async (payload , signature) => {
-           const ServiceToken = jwt.sign(payload ,signature ) 
+            let key = config.tokenSettings.serviceKey+signature
+            console.log(key)
+           const ServiceToken = jwt.sign(payload ,key ) 
            return ServiceToken
         } 
  }

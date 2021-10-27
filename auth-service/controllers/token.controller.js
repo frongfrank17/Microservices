@@ -1,5 +1,6 @@
 const authentication = require('./authentication')
 const services = require('../services')
+const tokenModel = require('../models/token.model')
 module.exports = {
     Accesstoken : async  ( req , res ) => {
         try {
@@ -50,17 +51,28 @@ module.exports = {
                 return  res.status(400)
             } 
             let permission = await services.permissionService.GetPermissionByRole({token : authorization } )
-            let permiss = permission.permissions
             
+            let permiss = permission.permissions
+
+            console.log(permiss)
+
             let result = permiss.filter( p => right.includes(p))
-       
+
+            console.log(result)
+
             let token = await  authentication.DevelopToken({
                     type : "DEVELOP" ,  
                     username : username , 
                     token_name : title , 
                     permission  : result
             })
-        
+            let create =  await tokenModel.create({
+                            username : username , 
+                            token_name : title , 
+                            permission : result , 
+                            token : token
+                        })
+            console.log(create)
             res.status(200).json({ "token_type" : "Bearer" , "token" : token  }) 
            
         } catch(err) {

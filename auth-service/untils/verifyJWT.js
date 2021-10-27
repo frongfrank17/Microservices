@@ -14,15 +14,16 @@ module.exports.isAuthen = (req, res, next) => {
     }
 
     try {
-      
+   
 
         try{
+        
         const decoded = jwt.verify(token ,config.tokenSettings.publicKey)
     
         req.jwtDecode = decoded
 
         }catch (err ) {
-
+   
             const decoded = jwt.verify(token ,config.tokenSettings.developKey)
             req.jwtDecode = decoded
         } 
@@ -44,6 +45,7 @@ module.exports.isAuthen_ = (req, res, next) => {
     }
     
     const token = authorization.split(' ')[1]
+
     if (!token) {
         return next(new Error('Missing Bearer Token'))
     }

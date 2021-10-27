@@ -1,5 +1,11 @@
 
 const mongoose = require('mongoose')
+var session = require('express-session')
+const  Store = session.Store
+var MongooseStore = require('mongoose-express-session')(Store);
+const NodeSession = require('node-session');
+
+const client = require('./memory/Caching').client
 Schema = mongoose.Schema
 const express = require('express')
 const app = express()
@@ -28,7 +34,15 @@ app.use(express.json())
 app.use(express.urlencoded( { extended:true }))
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded( {extended:true} ))
-app.use(cookieParser())
+app.use( 
+    session ({
+        secret: 'keyboard cat',
+        resave: false,
+
+        saveUninitialized: true,
+       // store :new MongooseStore({connection: mongoose})
+    })
+    )
 app.use(cors(corsMiddleware))
 
 server.listen(config.serverSettings.port, () => {
@@ -51,6 +65,9 @@ server.listen(config.serverSettings.port, () => {
 
     db.once('open',() => {
         console.log('Connected. Starting Server')
+        client.on('connect', function() {
+            console.log('Connected Redis !');
+          });
         app.get('/api/test' , csrf({cookie : true}) , ( req, res ,next) => {
 
                     const objectjson = req
@@ -60,8 +77,9 @@ server.listen(config.serverSettings.port, () => {
                     res.json({ headers : headers , cookies : req.cookies  })
         }  )
         app.use('/Oauth' ,  require('./routes'))
-     
-     
+
+
+   
         console.log(`Server started succesfully, running on port: ${config.serverSettings.port}.`)
     })
 })  

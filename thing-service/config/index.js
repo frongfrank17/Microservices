@@ -14,9 +14,8 @@ module.exports = {
         }
     },
     tokenSettings: {
-        publicKey: process.env.PUBLIC_KEY|| 'Authus',
-        privateKey: process.env.PRIVATE_KEY || 'THIVG_14EY',
-        serviceKey: process.env.PRIVATE_KEY || 'SERV1CE_',
-
+        publicKey: process.env.PUBLIC_KEY|| 'THING',
+        privateKey: process.env.PRIVATE_KEY || 'serv1ce_14ey_THING',
+        serviceKey: process.env.SERVICE_KEY || 'SERV1CE_14EY',
     }
 }

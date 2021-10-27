@@ -1,11 +1,8 @@
 const services = require('../services')
 const jwt = require('jsonwebtoken')
 const config = require('../config')
-const crypto = require('crypto');
-const hashHmacSha256 = string => crypto
-  .createHmac('sha256', config.tokenSettings.publicKey)
-  .update(string)
-  .digest('hex');
+
+
 module.exports = {
     Middleware : async ( req , res , next) => {
         try {
@@ -26,34 +23,29 @@ module.exports = {
                 return next(new Error('Missing Bearer Token'))
 
             }
-            try{
-                const decoded = jwt.verify(token ,config.tokenSettings.serviceKey)
-                req.permissions = permission
-                req.jwtDecode = decoded
-           
-            } catch (err) {
+
 
                     const Key = await services.OauthService.Keyservice({token : authorization  })
 
-                    console.log(Key)
+             
 
                     let permissions = Key.permissions
                         
-                    const haveViewThing = permissions.includes('read:thing')
+                    const havePermission = permissions.includes('create:data')
 
-                    if (!haveViewThing) {
+                    if (!havePermission) {
 
                         return   res.status(401).send(  { message :' Missing Permission API ' })
 
                     } 
-                    console.log(Key)
+                
 
                     const decoded = jwt.verify(Key.apiKey ,config.tokenSettings.privateKey)
 
                     req.permissions = permissions
                     
                     req.jwtDecode = decoded
-            }
+            
             next()
 
         }catch(err) {

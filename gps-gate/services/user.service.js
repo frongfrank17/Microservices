@@ -1,19 +1,19 @@
 const request = require('request');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 process.env.NODE_TLS_ACCEPT_UNTRUSTED_CERTIFICATES_THIS_IS_INSECURE = '1'
-const serviceUrl = ( 
-    'http://localhost:3206' || 'http://10.224.188.14' ||
-    process.env.SERVICE_USERDEMO || 'http://localhost:3206'
-);
-module.exports.Login =  (payload) => {
-   return new Promise((resolve, reject) => {
-       console.log("LOGIN")
 
-        const opts = { gzip:true,
-            headers: {'Content-Type': 'application/json'},
-            url: (serviceUrl) + '/userdemo/login',
+module.exports = (account) => {
+   return new Promise((resolve, reject) => {
+
+        const opts = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            url: (process.env.SERVER_URL_DOCK2 || 'http://localhost:3001') + '/user',
             method: 'POST',
-            json: payload,
+            json: true,
+            form: {
+                username: account.username,
+                email: account.email
+            }
         }
         
         request(opts, function(error, response, body) {
